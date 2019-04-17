@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+
+<h:form id="peopleEditForm">
+	<p:messages showDetail="false" closable="true" severity="error" />
+	<b:row>
+		<b:column span="4">
+			<h:outputText value="Nome:" />
+		</b:column>
+		<b:column span="8">
+			<b:inputText placeholder="Nome"
+				value="#{peopleController.people.name}" />
+		</b:column>
+	</b:row>
+	<b:row>
+		<b:column span="4">
+			<h:outputText value="Email:" />
+		</b:column>
+		<b:column span="8">
+			<b:inputText placeholder="Email" mask="email" render-label="true"
+				value="#{peopleController.people.email}" />
+		</b:column>
+	</b:row>
+	<b:row>
+		<b:column span="4">
+			<h:outputText value="Telefone:" />
+		</b:column>
+		<b:column span="2">
+			<b:inputText placeholder="Telefone"
+				value="#{peopleController.people.telephone}"
+				mask="(99) 9999[9]-9999" />
+		</b:column>
+	</b:row>
+
+	<b:commandButton icon-awesome="fa-floppy-o" value="Salvar Cliente"
+		look="success" action="#{peopleController.updatePeople()}"
+		update="listForm" oncomplete="PF('dialog-modal-edit').hide();" />
+</h:form>
+</html>

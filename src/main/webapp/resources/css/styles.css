@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+.headerTable {
+	background-color: #000;
+	color: #fff;
+	text-transform: capitalize;
+	text-align: center;
+}
+
+.panel-heading {
+	border-bottom: 1px solid #F0F2F1 !important;
+}

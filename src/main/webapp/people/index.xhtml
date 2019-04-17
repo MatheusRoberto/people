@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cliente</title>
+	<h:outputStylesheet library="css" name="styles.css" />
+</h:head>
+<h:body>
+	<b:panel look="footer">
+		<h:form id="peopleForm">
+			<p:messages showDetail="true" closable="true" severity="warn" />
+			<p:messages closable="true" severity="error" />
+			<p:messages showDetail="true" closable="true" severity="info" />
+			<h:form id="createForm">
+				<b:panel collapsible="false" look="content"
+					style="padding-left: 15px;">
+					<f:facet name="heading">
+						<b:iconAwesome value="group" style="padding-right: 5px" />
+						<h:outputText value="Adicioar Cliente" />
+					</f:facet>
+					<b:row>
+						<b:column span="6">
+							<h:outputText value="Nome:" />
+						</b:column>
+						<b:column span="6">
+							<h:outputText value="Email:" />
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column span="6">
+							<b:inputText placeholder="Nome"
+								value="#{peopleController.people.name}" />
+						</b:column>
+						<b:column span="4">
+							<b:inputText placeholder="Email" mask="email" render-label="true"
+								value="#{peopleController.people.email}" />
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column span="6">
+							<h:outputText value="Telefone:" />
+						</b:column>
+					</b:row>
+
+					<b:row>
+						<b:column span="2">
+							<b:inputText placeholder="Telefone"
+								value="#{peopleController.people.telephone}"
+								mask="(99) 9999[9]-9999" />
+						</b:column>
+					</b:row>
+
+
+					<b:commandButton icon-awesome="fa-floppy-o" value="Salvar Cliente"
+						look="success" action="#{peopleController.savePeople()}"
+						update="peopleForm" />
+				</b:panel>
+			</h:form>
+			<p:spacer />
+			<h:form id="listForm">
+				<b:panel look="content" collapsible="false"
+					style="padding-left: 15px;">
+					<f:facet name="heading" style="border-bottom: 1px solid #aaa">
+						<b:iconAwesome value="fa-user" style="padding-right: 5px" />
+						<h:outputText value="Lista de Clientes" />
+					</f:facet>
+					<b:row>
+						<b:column span="6">
+							<h:outputText value="Nome:" />
+						</b:column>
+						<b:column span="6">
+							<h:outputText value="Email:" />
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column span="4">
+							<b:inputText placeholder="Filtrar por Nome" id="filterName"
+								styleClass="filter" value="#{peopleController.name}" />
+						</b:column>
+						<b:column span="4">
+							<b:inputText placeholder="Filtrar por Email" render-label="true"
+								id="filterEmail" styleClass="filter"
+								value="#{peopleController.email}" />
+						</b:column>
+						<b:column span="4">
+							<b:commandButton icon-awesome="fa-search"
+								value="Pesquisar Cliente" look="success"
+								action="#{peopleController.filterPeople}"
+								update="@(.tablePeople)" ajax="true" style="margin-right: 5px">
+							</b:commandButton>
+							<b:remoteCommand name="clearFilter" id="rcClearFilter"
+								actionListener="#{peopleController.clearFilter}"
+								update="@(.tablePeople)" />
+							<b:commandButton icon-awesome="fa-eraser" value="Limpar Filtro"
+								look="primary" ajax="true"
+								onclick="clearFilter(event);$('.filter').val('');return false;"
+								style="background-color: #4B5E6F !important;" />
+						</b:column>
+					</b:row>
+					<b:dataTable id="tablePeople" value="#{peopleController.items}"
+						var="item" paginated="false" searching="false"
+						styleClass="tablePeople">
+
+						<b:dataTableColumn value="#{item.idPeople}" label="Código"
+							orderable="false" style="width: 50px" order="asc"
+							labelStyleClass="headerTable" headerStyleClass="headerTable" />
+						<b:dataTableColumn value="#{item.name}" label="Nome"
+							orderable="false" searchable="true"
+							content-style="text-transform: uppercase;"
+							labelStyleClass="headerTable" headerStyleClass="headerTable" />
+						<b:dataTableColumn value="#{item.email}" label="Email"
+							orderable="false" searchable="true"
+							content-style="text-transform: uppercase;"
+							labelStyleClass="headerTable" headerStyleClass="headerTable" />
+						<b:dataTableColumn value="#{item.telephone}" label="Telefone"
+							orderable="false" searchValue="false"
+							labelStyleClass="headerTable" headerStyleClass="headerTable" />
+						<b:dataTableColumn orderable="false" label="Editar"
+							style="width: 50px" labelStyleClass="headerTable"
+							headerStyleClass="headerTable">
+							<b:commandButton icon="edit" ajax="true"
+								actionListener="#{peopleController.prepareEdit(item)}"
+								oncomplete="$('.dialogModalEdit').modal('show');"
+								update="peopleForm:peopleEditForm" />
+						</b:dataTableColumn>
+						<b:dataTableColumn orderable="false" label="Excluir"
+							style="width: 50px" labelStyleClass="headerTable"
+							headerStyleClass="headerTable">
+							<b:commandButton iconAwesome="trash"
+								action="#{peopleController.deletePeople(item)}">
+								<f:ajax execute="@this" render="@form" />
+							</b:commandButton>
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</h:form>
+			<b:modal styleClass="dialogModalEdit">
+				<h:form id="peopleEditForm">
+					<p:messages showDetail="false" closable="true" severity="error" />
+					<b:row>
+						<b:column span="2">
+							<h:outputText value="Código:" />
+						</b:column>
+						<b:column span="10">
+							<h:inputHidden value="#{peopleController.people.idPeople}" />
+							<b:inputText placeholder="Código" disabled="true"
+								value="#{peopleController.people.idPeople}" />
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column span="2">
+							<h:outputText value="Nome:" />
+						</b:column>
+						<b:column span="10">
+							<b:inputText placeholder="Nome"
+								value="#{peopleController.people.name}" />
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column span="2">
+							<h:outputText value="Email:" />
+						</b:column>
+						<b:column span="10">
+							<b:inputText placeholder="Email" mask="email" render-label="true"
+								value="#{peopleController.people.email}" />
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column span="2">
+							<h:outputText value="Telefone:" />
+						</b:column>
+						<b:column span="10">
+							<b:inputText placeholder="Telefone"
+								value="#{peopleController.people.telephone}"
+								mask="(99) 9999[9]-9999" />
+						</b:column>
+					</b:row>
+
+					<b:commandButton icon-awesome="fa-floppy-o" value="Salvar Cliente"
+						look="success" action="#{peopleController.updatePeople()}"
+						update="@form" oncomplete="$('.dialogModalEdit').modal('hide');"
+						ajax="true" />
+				</h:form>
+			</b:modal>
+		</h:form>
+	</b:panel>
+</h:body>
+</html>

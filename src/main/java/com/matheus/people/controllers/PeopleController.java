@@ -163,7 +163,7 @@ public class PeopleController {
 			return new ArrayList<People>();
 
 		for (People people : items) {
-			if (people.getName().toLowerCase().contains(name))
+			if (people.getName().toLowerCase().contains(name.toLowerCase()))
 				filtered.add(people);
 		}
 		return filtered;
@@ -179,7 +179,7 @@ public class PeopleController {
 		if (email.isEmpty())
 			return new ArrayList<People>();
 		for (People people : items) {
-			if (people.getEmail().contains(email))
+			if (people.getEmail().toLowerCase().contains(email.toLowerCase()))
 				filtered.add(people);
 		}
 		return filtered;
